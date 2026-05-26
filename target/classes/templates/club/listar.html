@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head}"></head>
+<body>
+<nav th:replace="~{layout/base :: navbar}"></nav>
+
+<div class="page-header">
+    <div class="container">
+        <div class="d-flex align-items-center gap-3">
+            <div class="ph-icon-box"><i class="bi bi-shield-fill"></i></div>
+            <div>
+                <h1>Clubes</h1>
+                <p>Equipos de fútbol afiliados a la liga</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="stat-badge">
+            <span class="dot"></span>
+            <span th:text="${#lists.size(clubes)} + ' registros'">0 registros</span>
+        </div>
+        <a th:href="@{/club/nuevo}" class="btn btn-new">
+            <i class="bi bi-plus-lg me-1"></i>Nuevo Club
+        </a>
+    </div>
+
+    <div class="card-main">
+        <table th:if="${not #lists.isEmpty(clubes)}" class="table">
+            <thead>
+            <tr>
+                <th><i class="bi bi-hash me-1"></i>ID</th>
+                <th><i class="bi bi-shield me-1"></i>Club</th>
+                <th><i class="bi bi-geo-alt me-1"></i>Ciudad</th>
+                <th><i class="bi bi-calendar me-1"></i>Fundación</th>
+                <th><i class="bi bi-building me-1"></i>Asociación</th>
+                <th><i class="bi bi-person-badge me-1"></i>Entrenador</th>
+                <th><i class="bi bi-person-fill-run me-1"></i>Jugadores</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${clubes}">
+                <td><span class="id-pill" th:text="${c.id}"></span></td>
+                <td>
+                    <span class="fw-semibold d-flex align-items-center gap-2">
+                        <i class="bi bi-shield-fill text-primary opacity-60" style="font-size:.85rem"></i>
+                        <span th:text="${c.nombre}"></span>
+                    </span>
+                </td>
+                <td th:text="${c.ciudad}"></td>
+                <td>
+                    <span th:if="${c.anioFundacion > 0}" class="small" th:text="${c.anioFundacion}"></span>
+                    <span th:if="${c.anioFundacion == 0}" class="text-muted small">—</span>
+                </td>
+                <td>
+                    <span th:if="${c.asociacion != null}"
+                          class="tag-indigo" th:text="${c.asociacion.nombre}"></span>
+                    <span th:if="${c.asociacion == null}" class="text-muted small">—</span>
+                </td>
+                <td>
+                    <span th:if="${c.entrenador != null}"
+                          class="d-flex align-items-center gap-1">
+                        <i class="bi bi-person-badge-fill text-secondary" style="font-size:.8rem"></i>
+                        <span th:text="${c.entrenador.nombre + ' ' + c.entrenador.apellido}" class="small"></span>
+                    </span>
+                    <span th:if="${c.entrenador == null}" class="text-muted small">—</span>
+                </td>
+                <td>
+                    <span th:if="${not #lists.isEmpty(c.jugadores)}"
+                          class="d-flex flex-wrap gap-1">
+                        <span th:each="j : ${c.jugadores}"
+                              class="tag-teal"
+                              th:text="'#' + ${j.numero} + ' ' + ${j.apellido}">
+                        </span>
+                    </span>
+                    <span th:if="${#lists.isEmpty(c.jugadores)}" class="text-muted small">—</span>
+                </td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <a th:href="@{/club/editar/{id}(id=${c.id})}"
+                           class="btn btn-primary btn-sm">
+                            <i class="bi bi-pencil-fill me-1"></i>Editar
+                        </a>
+                        <a th:href="@{/club/eliminar/{id}(id=${c.id})}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Eliminar este club?')">
+                            <i class="bi bi-trash3-fill me-1"></i>Eliminar
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${#lists.isEmpty(clubes)}" class="empty-wrap">
+            <div class="empty-circle"><i class="bi bi-shield-fill"></i></div>
+            <p class="empty-title">Sin clubes registrados</p>
+            <p class="empty-sub">Primero crea asociaciones, entrenadores y competiciones, luego crea el primer club</p>
+            <a th:href="@{/club/nuevo}" class="btn btn-new">
+                <i class="bi bi-plus-lg me-1"></i>Crear club
+            </a>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{layout/base :: footer}"></footer>
+<div th:replace="~{layout/base :: scripts}"></div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+com\quiz1\app\controller\JugadorController.class
+com\quiz1\app\models\Asociacion.class
+com\quiz1\app\repositorio\EntrenadorRepositorio.class
+com\quiz1\app\models\Club.class
+com\quiz1\app\models\Competicion.class
+com\quiz1\app\models\Jugador.class
+com\quiz1\app\controller\EntrenadorController.class
+com\quiz1\app\repositorio\ClubRepositorio.class
+com\quiz1\app\repositorio\AsociacionRepositorio.class
+com\quiz1\app\repositorio\JugadorRepositorio.class
+com\quiz1\app\repositorio\CompeticionRepositorio.class
+com\quiz1\app\controller\AsociacionController.class
+com\quiz1\app\controller\CompeticionController.class
+com\quiz1\app\controller\ClubController.class
+com\quiz1\app\models\Entrenador.class

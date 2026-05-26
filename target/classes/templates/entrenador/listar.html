@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head}"></head>
+<body>
+<nav th:replace="~{layout/base :: navbar}"></nav>
+
+<div class="page-header">
+    <div class="container">
+        <div class="d-flex align-items-center gap-3">
+            <div class="ph-icon-box"><i class="bi bi-person-badge-fill"></i></div>
+            <div>
+                <h1>Entrenadores</h1>
+                <p>Cuerpo técnico de los clubes de la liga</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="stat-badge">
+            <span class="dot"></span>
+            <span th:text="${#lists.size(entrenadores)} + ' registros'">0 registros</span>
+        </div>
+        <a th:href="@{/entrenador/nuevo}" class="btn btn-new">
+            <i class="bi bi-plus-lg me-1"></i>Nuevo Entrenador
+        </a>
+    </div>
+
+    <div class="card-main">
+        <table th:if="${not #lists.isEmpty(entrenadores)}" class="table">
+            <thead>
+            <tr>
+                <th><i class="bi bi-hash me-1"></i>ID</th>
+                <th><i class="bi bi-person me-1"></i>Nombre</th>
+                <th>Apellido</th>
+                <th><i class="bi bi-calendar me-1"></i>Edad</th>
+                <th><i class="bi bi-globe me-1"></i>Nacionalidad</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="e : ${entrenadores}">
+                <td><span class="id-pill" th:text="${e.id}"></span></td>
+                <td class="fw-semibold" th:text="${e.nombre}"></td>
+                <td th:text="${e.apellido}"></td>
+                <td>
+                    <span th:if="${e.edad > 0}"
+                          class="tag-indigo"
+                          th:text="${e.edad} + ' años'"></span>
+                    <span th:if="${e.edad == 0}" class="text-muted small">—</span>
+                </td>
+                <td>
+                    <span th:if="${e.nacionalidad != null and !#strings.isEmpty(e.nacionalidad)}"
+                          class="tag-teal" th:text="${e.nacionalidad}"></span>
+                    <span th:if="${e.nacionalidad == null or #strings.isEmpty(e.nacionalidad)}" class="text-muted small">—</span>
+                </td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <a th:href="@{/entrenador/editar/{id}(id=${e.id})}"
+                           class="btn btn-primary btn-sm">
+                            <i class="bi bi-pencil-fill me-1"></i>Editar
+                        </a>
+                        <a th:href="@{/entrenador/eliminar/{id}(id=${e.id})}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Eliminar este entrenador?')">
+                            <i class="bi bi-trash3-fill me-1"></i>Eliminar
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${#lists.isEmpty(entrenadores)}" class="empty-wrap">
+            <div class="empty-circle"><i class="bi bi-person-badge-fill"></i></div>
+            <p class="empty-title">Sin entrenadores registrados</p>
+            <p class="empty-sub">Agrega entrenadores para asignarlos a los clubes</p>
+            <a th:href="@{/entrenador/nuevo}" class="btn btn-new">
+                <i class="bi bi-plus-lg me-1"></i>Crear entrenador
+            </a>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{layout/base :: footer}"></footer>
+<div th:replace="~{layout/base :: scripts}"></div>
+</body>
+</html>

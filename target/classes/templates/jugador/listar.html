@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head}"></head>
+<body>
+<nav th:replace="~{layout/base :: navbar}"></nav>
+
+<div class="page-header">
+    <div class="container">
+        <div class="d-flex align-items-center gap-3">
+            <div class="ph-icon-box"><i class="bi bi-person-fill-run"></i></div>
+            <div>
+                <h1>Jugadores</h1>
+                <p>Plantilla de jugadores registrados en la liga</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="stat-badge">
+            <span class="dot"></span>
+            <span th:text="${#lists.size(jugadores)} + ' registros'">0 registros</span>
+        </div>
+        <a th:href="@{/jugador/nuevo}" class="btn btn-new">
+            <i class="bi bi-plus-lg me-1"></i>Nuevo Jugador
+        </a>
+    </div>
+
+    <div class="card-main">
+        <table th:if="${not #lists.isEmpty(jugadores)}" class="table">
+            <thead>
+            <tr>
+                <th><i class="bi bi-hash me-1"></i>ID</th>
+                <th><i class="bi bi-person me-1"></i>Nombre</th>
+                <th>Apellido</th>
+                <th><i class="bi bi-123 me-1"></i>Dorsal</th>
+                <th><i class="bi bi-geo me-1"></i>Posición</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="j : ${jugadores}">
+                <td><span class="id-pill" th:text="${j.id}"></span></td>
+                <td class="fw-semibold" th:text="${j.nombre}"></td>
+                <td th:text="${j.apellido}"></td>
+                <td>
+                    <span th:if="${j.numero > 0}" class="num-badge" th:text="'#' + ${j.numero}"></span>
+                    <span th:if="${j.numero == 0}" class="text-muted small">—</span>
+                </td>
+                <td>
+                    <span th:if="${j.posicion != null and !#strings.isEmpty(j.posicion)}"
+                          class="tag-teal" th:text="${j.posicion}"></span>
+                </td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <a th:href="@{/jugador/editar/{id}(id=${j.id})}"
+                           class="btn btn-primary btn-sm">
+                            <i class="bi bi-pencil-fill me-1"></i>Editar
+                        </a>
+                        <a th:href="@{/jugador/eliminar/{id}(id=${j.id})}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Eliminar este jugador?')">
+                            <i class="bi bi-trash3-fill me-1"></i>Eliminar
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${#lists.isEmpty(jugadores)}" class="empty-wrap">
+            <div class="empty-circle"><i class="bi bi-person-fill-run"></i></div>
+            <p class="empty-title">Sin jugadores registrados</p>
+            <p class="empty-sub">Registra jugadores para luego asignarlos a un club</p>
+            <a th:href="@{/jugador/nuevo}" class="btn btn-new">
+                <i class="bi bi-plus-lg me-1"></i>Crear jugador
+            </a>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{layout/base :: footer}"></footer>
+<div th:replace="~{layout/base :: scripts}"></div>
+</body>
+</html>
