@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"c:\\\\Trabajos 2026\\\\quiz1\" -Recurse -Force)",
+      "Bash(Select-Object FullName)",
+      "Bash(New-Item -ItemType Directory -Force \"c:\\\\Trabajos 2026\\\\quiz1\\\\src\\\\main\\\\java\\\\com\\\\quiz1\\\\app\\\\controller\")",
+      "Bash(Out-Null)",
+      "Bash(New-Item -ItemType File -Force \"c:\\\\Trabajos 2026\\\\quiz1\\\\src\\\\main\\\\java\\\\com\\\\quiz1\\\\app\\\\controller\\\\.gitkeep\")",
+      "Bash(Write-Output \"Directories created\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"c:\\\\Trabajos 2026\\\\quiz1\\\\src\\\\main\\\\java\\\\com\\\\quiz1\\\\app\\\\controller\")",
+      "PowerShell(New-Item -ItemType File -Force \"c:\\\\Trabajos 2026\\\\quiz1\\\\src\\\\main\\\\java\\\\com\\\\quiz1\\\\app\\\\controller\\\\.gitkeep\")"
+    ]
+  }
+}

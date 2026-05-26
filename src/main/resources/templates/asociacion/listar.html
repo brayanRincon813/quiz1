@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head}"></head>
+<body>
+<nav th:replace="~{layout/base :: navbar}"></nav>
+
+<div class="page-header">
+    <div class="container">
+        <div class="d-flex align-items-center gap-3">
+            <div class="ph-icon-box"><i class="bi bi-building-fill"></i></div>
+            <div>
+                <h1>Asociaciones</h1>
+                <p>Federaciones y organismos que agrupan los clubes</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="stat-badge">
+            <span class="dot"></span>
+            <span th:text="${#lists.size(asociaciones)} + ' registros'">0 registros</span>
+        </div>
+        <a th:href="@{/asociacion/nuevo}" class="btn btn-new">
+            <i class="bi bi-plus-lg me-1"></i>Nueva Asociación
+        </a>
+    </div>
+
+    <div class="card-main">
+        <table th:if="${not #lists.isEmpty(asociaciones)}" class="table">
+            <thead>
+            <tr>
+                <th><i class="bi bi-hash me-1"></i>ID</th>
+                <th><i class="bi bi-building me-1"></i>Nombre</th>
+                <th><i class="bi bi-geo-alt me-1"></i>País</th>
+                <th><i class="bi bi-person me-1"></i>Presidente</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="a : ${asociaciones}">
+                <td><span class="id-pill" th:text="${a.id}"></span></td>
+                <td>
+                    <span class="fw-700 d-flex align-items-center gap-2" style="font-weight:600">
+                        <i class="bi bi-building-fill text-primary opacity-50"></i>
+                        <span th:text="${a.nombre}"></span>
+                    </span>
+                </td>
+                <td>
+                    <span class="tag-indigo" th:text="${a.pais}"></span>
+                </td>
+                <td th:text="${a.presidente != null and !#strings.isEmpty(a.presidente) ? a.presidente : '—'}"></td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <a th:href="@{/asociacion/editar/{id}(id=${a.id})}"
+                           class="btn btn-primary btn-sm">
+                            <i class="bi bi-pencil-fill me-1"></i>Editar
+                        </a>
+                        <a th:href="@{/asociacion/eliminar/{id}(id=${a.id})}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Eliminar esta asociación?')">
+                            <i class="bi bi-trash3-fill me-1"></i>Eliminar
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${#lists.isEmpty(asociaciones)}" class="empty-wrap">
+            <div class="empty-circle"><i class="bi bi-building-fill"></i></div>
+            <p class="empty-title">Sin asociaciones registradas</p>
+            <p class="empty-sub">Crea la primera asociación para comenzar a gestionar la liga</p>
+            <a th:href="@{/asociacion/nuevo}" class="btn btn-new">
+                <i class="bi bi-plus-lg me-1"></i>Crear asociación
+            </a>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{layout/base :: footer}"></footer>
+<div th:replace="~{layout/base :: scripts}"></div>
+</body>
+</html>

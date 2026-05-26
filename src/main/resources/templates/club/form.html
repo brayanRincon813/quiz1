@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head}"></head>
+<body>
+<nav th:replace="~{layout/base :: navbar}"></nav>
+
+<div class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-2">
+            <ol class="breadcrumb breadcrumb-dark mb-0">
+                <li class="breadcrumb-item">
+                    <a th:href="@{/club/listar}"><i class="bi bi-shield-fill me-1"></i>Clubes</a>
+                </li>
+                <li class="breadcrumb-item active" th:text="${titulo}"></li>
+            </ol>
+        </nav>
+        <h1 th:text="${titulo}">Club</h1>
+        <p>Completa los campos requeridos marcados con <span style="color:#f87171">*</span></p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card card-form p-4">
+                <form th:action="@{/club/guardar}" th:object="${club}" method="post">
+                    <input type="hidden" th:field="*{id}">
+
+                    <!-- Sección: Info básica -->
+                    <p class="section-title"><i class="bi bi-shield me-1"></i>Información del club</p>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-7">
+                            <label class="form-label">
+                                <i class="bi bi-card-text"></i> Nombre <span class="required-star">*</span>
+                            </label>
+                            <input type="text" class="form-control" th:field="*{nombre}"
+                                   placeholder="Ej: Atlético Nacional">
+                            <span class="text-danger small d-block mt-1" th:errors="*{nombre}"></span>
+                        </div>
+                        <div class="col-5">
+                            <label class="form-label">
+                                <i class="bi bi-calendar"></i> Año Fundación
+                            </label>
+                            <input type="number" class="form-control" th:field="*{anioFundacion}"
+                                   min="1800" max="2100" placeholder="1947">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">
+                            <i class="bi bi-geo-alt"></i> Ciudad <span class="required-star">*</span>
+                        </label>
+                        <input type="text" class="form-control" th:field="*{ciudad}"
+                               placeholder="Ej: Medellín">
+                        <span class="text-danger small d-block mt-1" th:errors="*{ciudad}"></span>
+                    </div>
+
+                    <!-- Sección: Relaciones -->
+                    <p class="section-title"><i class="bi bi-diagram-3 me-1"></i>Relaciones</p>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-building"></i> Asociación
+                        </label>
+                        <select class="form-select" name="asociacionId">
+                            <option value="">— Sin asociación —</option>
+                            <option th:each="a : ${asociaciones}"
+                                    th:value="${a.id}"
+                                    th:text="${a.nombre + ' (' + a.pais + ')'}"
+                                    th:selected="${club.asociacion != null and club.asociacion.id == a.id}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-person-badge"></i> Entrenador
+                        </label>
+                        <select class="form-select" name="entrenadorId">
+                            <option value="">— Sin entrenador —</option>
+                            <option th:each="e : ${entrenadores}"
+                                    th:value="${e.id}"
+                                    th:text="${e.nombre + ' ' + e.apellido}"
+                                    th:selected="${club.entrenador != null and club.entrenador.id == e.id}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-trophy"></i> Competiciones
+                        </label>
+                        <select class="form-select" name="competicionIds" multiple size="4">
+                            <option th:each="comp : ${competiciones}"
+                                    th:value="${comp.id}"
+                                    th:text="${comp.nombre}"
+                                    th:selected="${selectedCompeticionIds.contains(comp.id)}">
+                            </option>
+                        </select>
+                        <small class="text-muted d-block mt-1">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Mantén <kbd>Ctrl</kbd> para seleccionar múltiples
+                        </small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">
+                            <i class="bi bi-person-fill-run"></i> Jugadores
+                        </label>
+                        <div th:if="${#lists.isEmpty(jugadores)}"
+                             class="form-control text-muted small"
+                             style="height:auto; padding:.6rem .85rem">
+                            <i class="bi bi-exclamation-circle me-1"></i>
+                            No hay jugadores registrados aún — créalos primero en el módulo de Jugadores
+                        </div>
+                        <select th:if="${not #lists.isEmpty(jugadores)}"
+                                class="form-select" name="jugadorIds" multiple size="5">
+                            <option th:each="j : ${jugadores}"
+                                    th:value="${j.id}"
+                                    th:text="${j.nombre + ' ' + j.apellido + ' — #' + j.numero + ' ' + j.posicion}"
+                                    th:selected="${selectedJugadorIds.contains(j.id)}">
+                            </option>
+                        </select>
+                        <small class="text-muted d-block mt-1">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Mantén <kbd>Ctrl</kbd> para seleccionar múltiples
+                        </small>
+                    </div>
+
+                    <div class="d-flex gap-2 pt-2 border-top">
+                        <button type="submit" class="btn btn-success flex-grow-1">
+                            <i class="bi bi-check-lg me-1"></i>Guardar
+                        </button>
+                        <a th:href="@{/club/listar}" class="btn btn-outline-secondary flex-grow-1">
+                            <i class="bi bi-x-lg me-1"></i>Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{layout/base :: footer}"></footer>
+<div th:replace="~{layout/base :: scripts}"></div>
+</body>
+</html>
